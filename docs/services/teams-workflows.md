@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Teams Workflows notification service sends message notifications using Microsoft Teams Workflows (Power Automate). This is the recommended replacement for the legacy Office 365 Connectors service, which will be retired on March 31, 2026.
+The Teams Workflows notification service sends message notifications using Microsoft Teams Workflows (Power Automate). Microsoft [retired Office 365 Connectors within Teams](https://devblogs.microsoft.com/microsoft365dev/retirement-of-office-365-connectors-within-microsoft-teams/) on May 22, 2026. Teams Workflows is the supported option for Teams notifications; the legacy connector endpoints are no longer operational.
 
 ## Parameters
 
@@ -265,7 +265,7 @@ The Teams Workflows service supports the following template fields, which are au
 
 ## Migration from Office 365 Connectors
 
-The retired `teams` Office 365 Connector service and its template sections are no longer supported. Existing `service.teams` and `service.teams.<name>` entries are ignored with a migration warning so other services can still load. Notifications sent to a retired destination return an unsupported-service error.
+The retired `teams` Office 365 Connector service and its template sections are no longer supported. Existing `service.teams` and `service.teams.<name>` entries and `teams` template sections are ignored with migration warnings so other services can still load. Notifications sent to a retired destination return an unsupported-service error.
 
 Follow these steps to migrate:
 
