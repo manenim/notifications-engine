@@ -183,3 +183,32 @@ func TestParseConfig_Subscriptions(t *testing.T) {
 		{Triggers: []string{"my-trigger2"}, Selector: label},
 	}), cfg.Subscriptions)
 }
+
+func TestParseConfig_RetiredTeams(t *testing.T) {
+	for _, key := range []string{"service.teams", "service.teams.custom", "service.teams.shared"} {
+		t.Run(key, func(t *testing.T) {
+			cfg, err := ParseConfig(&corev1.ConfigMap{Data: map[string]string{
+				key:                              "recipientUrls: [", // Obsolete options must not be parsed.
+				"service.teams-workflows.shared": "recipientUrls: {}",
+				"service.webhook":                "url: https://example.com",
+				"template.mixed":                 "message: hello\nteams:\n  title: '{{obsoleteFunction}}'\nteams-workflows:\n  title: hello\n",
+			}}, emptySecret)
+			require.NoError(t, err)
+			require.Len(t, cfg.Services, 2)
+			require.Contains(t, cfg.Services, "shared")
+			require.Contains(t, cfg.Services, "webhook")
+			instance, err := NewAPI(*cfg, nil)
+			require.NoError(t, err)
+			assert.Len(t, instance.GetNotificationServices(), 2)
+			require.ErrorContains(t, instance.Send(nil, []string{"mixed"}, services.Destination{Service: "teams"}), "not supported")
+		})
+	}
+}
+
+func TestParseConfig_RetiredTeamsPreservesValidation(t *testing.T) {
+	_, err := ParseConfig(&corev1.ConfigMap{Data: map[string]string{
+		"service.teams":   "recipientUrls: [",
+		"service.webhook": "url: [",
+	}}, emptySecret)
+	require.ErrorContains(t, err, "webhook")
+}

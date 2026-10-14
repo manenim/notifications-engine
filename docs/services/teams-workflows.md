@@ -265,7 +265,9 @@ The Teams Workflows service supports the following template fields, which are au
 
 ## Migration from Office 365 Connectors
 
-If you're currently using the `teams` service with Office 365 Connectors, follow these steps to migrate:
+The retired `teams` Office 365 Connector service and its template sections are no longer supported. Existing `service.teams` and `service.teams.<name>` entries are ignored with a migration warning so other services can still load. Notifications sent to a retired destination return an unsupported-service error.
+
+Follow these steps to migrate:
 
 1. **Create a new Workflows webhook** using the configuration steps above
 

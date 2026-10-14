@@ -115,6 +115,12 @@ func ParseConfig(configMap *corev1.ConfigMap, secret *corev1.Secret) (*Config, e
 				return nil, fmt.Errorf("invalid service key; expected 'service.<type>(.<name>)' but got '%s'", k)
 			}
 
+			// Retired connector configuration must not prevent supported services from loading.
+			if serviceType == "teams" {
+				log.Warnf("ignoring retired Teams Office 365 Connector service %q; migrate to teams-workflows", k)
+				continue
+			}
+
 			optsData, err := replaceServiceConfigSecrets(v, secret)
 			if err != nil {
 				return nil, fmt.Errorf("failed to render service configuration %s: %w", serviceType, err)
