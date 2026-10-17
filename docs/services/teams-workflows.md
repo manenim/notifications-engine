@@ -305,7 +305,7 @@ Follow these steps to migrate:
 | Private Channels | ❌ | ✅ (Dec 2025+) |
 | Card Format | messageCard (legacy) | Adaptive Cards (modern) |
 | Template Conversion | N/A | Automatic conversion from template fields |
-| Retirement Date | March 31, 2026 | Active |
+| Retirement Date | May 22, 2026 | Active |
 
 ## Adaptive Card Features
 
